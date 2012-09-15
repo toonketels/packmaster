@@ -1,0 +1,24 @@
+<html>
+<head>
+  <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js'></script>
+</head>
+<body>
+<h1>We are on it</h1>
+
+<ul id="container">
+</ul>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  var socket = io.connect('http://localhost:3000');
+  var container = jQuery('ul');
+  console.log(container);
+
+  socket.on('news', function (data) {
+    console.log(data.message);
+    container.append('<li>' + data.message + '</li>');
+    socket.emit('my other event', { my: 'data' });
+  });
+</script>
+</body>
+</html>
