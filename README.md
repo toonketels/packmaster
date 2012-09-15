@@ -14,3 +14,5 @@ Exposes api to collect Drupal watchdog messages and allows them to be viewed usi
 
 To start the server do:
     node app.js
+
+View the application in your broswer on [localhost port 3000](http://localhost:3000)
