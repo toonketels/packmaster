@@ -2,10 +2,14 @@ var express =  require('express')
   , app = express()
   , server = require('http').createServer(app)
   , io = require('socket.io').listen(server)
-  , util = require('util');
+  , util = require('util')
+  , path = require('path');
 
-
+/**
+ * Configure app/use middleware.
+ */
 app.use(express.bodyParser());
+app.use(express.static(path.join(__dirname, 'public')));
 
 server.listen(3000, function() {
   console.log('Server is bound to port 3000');
@@ -17,10 +21,11 @@ app.post('/log', function (req, res) {
   app.emit('postLog', req);
 });
 
-app.get('/', function (req, res) {
-  res.sendfile(__dirname + '/index.html');
-});
 
+
+/**
+ * Socket connection...
+ */
 io.sockets.on('connection', function (socket) {
 
   app.on('postLog', function(req) {
