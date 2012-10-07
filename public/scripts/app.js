@@ -8,12 +8,36 @@ $(function(){
         alert(this.get('message_human'));
       }
     , change: function() {
-        console.log('changed')
+        console.log(this.get('message_human') + 'changed');
       }
     , getDateFormatted: function() {
         var date = new Date(this.get('timestamp') * 1000);
         var date_formatted = date.getMonth()+'.'+date.getDate()+' '+date.getHours()+':'+date.getMinutes()+':'+date.getSeconds();
         return date_formatted;
+      }
+  });
+
+
+  /**
+   * A basic list view.
+   */
+  var ListItemView = Backbone.View.extend({
+      tagName: 'li'
+    , className: 'log-message-item'
+    , initialize: function(){
+        this.model.bind('change', this.render, this);
+        this.render();
+      }
+    , render: function() {
+        var templateHtml = $('#list-item').html();
+        var templatePlaceholderValues = {
+            time: this.model.getDateFormatted()
+          , siteName: this.model.get('site_name')
+          , logMessage: this.model.get('message_human')
+        };
+        var template = _.template(templateHtml, templatePlaceholderValues);
+        $(this.el).html(template);
+        return this;
       }
   });
 
@@ -35,10 +59,13 @@ $(function(){
     // via the browser's console.
     window.latestLogMessage = logMessage;
 
+    var listItemView = new ListItemView({model: logMessage})
+    window.latestLogMessageView = listItemView;
+
     // Use models properties / methods
-    // to create the output.
-    container.append('<li>'+ logMessage.getDateFormatted() +' <strong>' + logMessage.get('site_name') + '</strong> - ' + logMessage.get('message_human') + '</li>');
-    
+    // to create the output
+    container.append(listItemView.el);
+
     // Emit something back to the server
     socket.emit('my other event', { my: 'data' });
   });
