@@ -34,10 +34,24 @@ $(function(){
             time: this.model.getDateFormatted()
           , siteName: this.model.get('site_name')
           , logMessage: this.model.get('message_human')
+          , page: this.model.get('request_uri')
+          , severity: this.model.get('severity')
         };
         var template = _.template(templateHtml, templatePlaceholderValues);
         $(this.el).html(template);
         return this;
+      }
+    , events : {
+          "click :has(.hidden)": 'showDetailLogMessage'
+        , "click .hide": 'hideDetailLogMessage'
+      }
+    , showDetailLogMessage: function() {
+        this.$('.detail').show('slow');
+        this.$('.hidden').removeClass('hidden');
+      }
+    , hideDetailLogMessage: function() {
+        this.$('.detail').hide('slow');
+        this.$('.detail').addClass('hidden');
       }
   });
 

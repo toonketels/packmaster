@@ -1,6 +1,9 @@
 <html>
 <head>
-  <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js'></script>
+  <style type="text/css" media="all">
+    @import url('css/style.css');
+  </style>
+  <script type='text/javascript' src='scripts/jquery-1.8.2.min.js'></script>
 </head>
 <body>
 <h1>We are on it</h1>
@@ -15,7 +18,21 @@
 <script src="scripts/app.js"></script>
 
 <script type="text/template" id="list-item">
-  <li><%- time %>  <strong><%- siteName %></strong> - <%- logMessage %></li>
+  <li class="list-item"><%- time %>  <strong><%- siteName %></strong> - <%- logMessage %>
+    <div class="detail hidden">
+      <table>
+        <tr>
+          <td>Page</td>
+          <td><%- page %></td>
+        </tr>
+        <tr>
+          <td>Severity</td>
+          <td><%- severity %></td>
+        </tr>
+      </table>
+      <div class="hide">close</div>
+    </div>
+  </li>
 </script>
 
 </body>
