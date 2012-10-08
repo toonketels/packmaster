@@ -57,16 +57,32 @@ $(function(){
 
 
   /**
+   * A basic collection to hold logitems.
+   */
+  var Log = Backbone.Collection.extend({
+      model: LogMessage
+  });
+
+
+  /**
    * Socket io stuff.
    */
-  var socket = io.connect('http://localhost:3000');
-  var container = jQuery('ul');
+  var socket = io.connect('http://localhost:3000')
+    , container = jQuery('ul')
+    , log = new Log();
+
+  // Make the log easily findable...
+  window.log = log;
+
 
   socket.on('news', function (data) {
     console.log(data);
 
     // Create a new nodel
     var logMessage = new LogMessage(data);
+
+    // Add it to the collection
+    log.add(logMessage);
 
     // Set latest message as property of
     // window object to easily access it
