@@ -42,7 +42,7 @@ $(function(){
         return this;
       }
     , events : {
-          "click :has(.hidden)": 'showDetailLogMessage'
+          "click .general": 'showDetailLogMessage'
         , "click .hide": 'hideDetailLogMessage'
       }
     , showDetailLogMessage: function() {
