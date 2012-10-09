@@ -18,13 +18,24 @@ $(function(){
   });
 
 
+
   /**
-   * A basic list view.
+   * A basic collection to hold logitems.
+   */
+  var Log = Backbone.Collection.extend({
+      model: LogMessage
+  });
+
+
+
+  /**
+   * A basic list item view.
    */
   var ListItemView = Backbone.View.extend({
       tagName: 'li'
     , className: 'log-message-item'
-    , initialize: function(){
+    , initialize: function(model){
+        this.model = model;
         this.model.bind('change', this.render, this);
         this.render();
       }
@@ -57,11 +68,27 @@ $(function(){
 
 
   /**
-   * A basic collection to hold logitems.
+   * Collection list view.
    */
-  var Log = Backbone.Collection.extend({
-      model: LogMessage
+  var ListView = Backbone.View.extend({
+      el: $('ul#container')
+    , initialize: function(collection) {
+        var self = this;
+        self.collection = collection;
+        self.collection.on('add', function(logMessage) {
+          var listItemView = new ListItemView(logMessage);
+          self.$el.append(listItemView.el);
+        });
+        this.render();
+      }
+    , render: function() {
+        this.collection.each(function(logMessage){
+          var listItemView = new ListItemView(logMessage);
+          this.el.append(listItemView.el);
+        });
+      }
   });
+
 
 
   /**
@@ -69,10 +96,12 @@ $(function(){
    */
   var socket = io.connect('http://localhost:3000')
     , container = jQuery('ul')
-    , log = new Log();
+    , log = new Log()
+    , logView = new ListView(log);
 
   // Make the log easily findable...
   window.log = log;
+  window.logView = logView;
 
 
   socket.on('news', function (data) {
@@ -89,12 +118,12 @@ $(function(){
     // via the browser's console.
     window.latestLogMessage = logMessage;
 
-    var listItemView = new ListItemView({model: logMessage})
-    window.latestLogMessageView = listItemView;
+    //var listItemView = new ListItemView({model: logMessage})
+    //window.latestLogMessageView = listItemView;
 
     // Use models properties / methods
     // to create the output
-    container.append(listItemView.el);
+    // container.append(listItemView.el);
 
     // Emit something back to the server
     socket.emit('my other event', { my: 'data' });
