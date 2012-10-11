@@ -53,16 +53,10 @@ $(function(){
         return this;
       }
     , events : {
-          "click .general": 'showDetailLogMessage'
-        , "click .hide": 'hideDetailLogMessage'
+        "click .general": 'showDetailLogMessage'
       }
     , showDetailLogMessage: function() {
-        this.$('.detail').show('slow');
-        this.$('.hidden').removeClass('hidden');
-      }
-    , hideDetailLogMessage: function() {
-        this.$('.detail').hide('slow');
-        this.$('.detail').addClass('hidden');
+        this.$('.reveal-modal').reveal();
       }
   });
 
@@ -117,13 +111,6 @@ $(function(){
     // window object to easily access it
     // via the browser's console.
     window.latestLogMessage = logMessage;
-
-    //var listItemView = new ListItemView({model: logMessage})
-    //window.latestLogMessageView = listItemView;
-
-    // Use models properties / methods
-    // to create the output
-    // container.append(listItemView.el);
 
     // Emit something back to the server
     socket.emit('my other event', { my: 'data' });
